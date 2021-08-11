@@ -1,15 +1,13 @@
-const logger = require('../src/middlware/logger');
+const logger = require('../middlewares/logger');
 describe('logger middleware', () => {
 
   let consoleSpy;
   let req = {};
   let res = {};
   let next = jest.fn();
-
   beforeEach(() => {
     consoleSpy = jest.spyOn(console, 'log').mockImplementation();
   });
-
   afterEach(() => {
     consoleSpy.mockRestore();
   });

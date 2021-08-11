@@ -1,26 +1,20 @@
-const validator = require('../src/middlware/validator');
-describe('validator middleware', () => {
-
-  let consoleSpy;
-  let req = {};
-  let res = {};
-  let next = jest.fn();
-
-  beforeEach(() => {
-    consoleSpy = jest.spyOn(console, 'validator').mockImplementation();
+const server = require('../src/server');
+const supertest = require('supertest');
+const request = supertest(server.app);
+describe('Api req', () => {
+  it('handel Err', async () => {
+    const response = await request.post('/bad');
+    expect(response.status).toEqual(500);
   });
-
-  afterEach(() => {
-    consoleSpy.mockRestore();
+  it('get data from /data ', async () => {
+    const response = await request.get('/data');
+    expect(response.status).toEqual(200);
+    expect(typeof response.body).toEqual('object');
   });
-
-  it('properly validator some output', () => {
-    validator(req, res, next);
-    expect(consoleSpy).toHaveBeenCalled();
-  });
-
-  it('moves to the next', () => {
-    validator(req, res, next);
-    expect(next).toHaveBeenCalled();
+  it('/ route works', async () => {
+    const response = await request.get('/');
+    expect(response.status).toEqual(200);
+    console.log(response.text);
+    expect(response.text).toEqual('Home route');
   });
 });
