@@ -1,41 +1,21 @@
 'use strict';
-
 const server = require('../src/server');
-const superTest = require('supertest');
-const request = superTest(server.app);
-
-
-describe('my Server', () => {
-
-  beforeEach(() => {
-    jest.spyOn(console, 'log').mockImplementation();
-  });
-
-
-  it('handles not found request', async () => {
-
-    const response = await request.get('/person');
-    expect(response.status).toEqual(404);
-  });
-
-
-  it('handles my internal server errors', async () => {
-    const response = await request.post('/throwing-error');
+const supertest = require('supertest');
+const request = supertest(server.app);
+describe('Api req', () => {
+  it('handel Err', async () => {
+    const response = await request.post('/bad');
     expect(response.status).toEqual(500);
   });
-
   it('get data from /data ', async () => {
-    const response = await request.get('/test');
+    const response = await request.get('/data');
     expect(response.status).toEqual(200);
     expect(typeof response.body).toEqual('object');
   });
-
   it('/ route works', async () => {
     const response = await request.get('/');
     expect(response.status).toEqual(200);
     console.log(response.text);
-    expect(response.text).toEqual('this is home page');
+    expect(response.text).toEqual('Home route');
   });
-
-
 });

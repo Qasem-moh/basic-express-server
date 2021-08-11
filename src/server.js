@@ -1,54 +1,46 @@
-'use strict';
-
-
 const express = require('express');
-
-//handle error
-const notFoundHandler = require('./error-handles/404');
-const serverErrorHandler = require('./error-handles/500');
-const logger = require('./middlware/logger');
-const checkName = require('./middlware/validator');
 const app = express();
+const notFoundHandler = require('./error-handlers/404');
+const errorHandler = require('./error-handlers/500');
+const person = require('./middleware/validator');
+const logger = require('./middleware/logger');
 
 app.use(express.json());
 app.use(logger);
-
 function start(port) {
-  app.listen(port, () => console.log(`Server is running on port ${port}`));
+  app.listen(port, () => console.log(`will run on ${port}`));
 }
-// main Route
 app.get('/', (req, res) => {
-  res.send('this is home page');
+  res.send('Home route');
+});
+app.post('/bad', (req, res) => {
+  let num = 1;
+  num.forEach(num =>
+    console.log(num));
+  res.send('sorry bad req !!!!! ');
 });
 
-app.get('/test', checkName('Qasem'), (req, res) => {
+app.get('/data', (req, res) => {
   res.json({
-    message: 'test route response',
-    person: req.person,
+    id: 1,
+    name: 'Samah',
   });
 });
-
-//secound Route 
-app.get('/person/:name', (req, res) => {
-  console.log(req.params.name);
-  //   res.send(`the name is : ${req.params.name}`);
+app.get('/person', person('samah'), (req, res) => {
   res.json({
-    name: req.params.name,
+    message: 'person route response',
+    name: req.personName,
+
   });
 });
-
-app.get('/throwing-error', checkName(2), (req, res) => {
-  res.send(`the result of squaring is ${req.person}`);
+app.get('/throwing-error', person(2), (req, res) => {
+  res.send(`The error is  ${req.personName}`);
 });
-
-
-//middlware
+app.use(errorHandler);
 app.use('*', notFoundHandler);
-app.use(serverErrorHandler);
 
-//export function
+
 module.exports = {
   app: app,
   start: start,
-
 };
