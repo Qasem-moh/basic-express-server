@@ -1,44 +1,38 @@
+'use strict';
+
 const express = require('express');
 const app = express();
-const notFoundHandler = require('./error-handlers/404');
-const errorHandler = require('./error-handlers/500');
-const person = require('./middleware/validator');
-const logger = require('./middleware/logger');
 
-app.use(express.json());
+const notFoundHandler = require('./error-handler/404');
+const errorHandler = require('./error-handler/500');
+const logger = require('./middelware/logger');
+const validator = require('./middelware/validator');
+
+
 app.use(logger);
+
 function start(port) {
-  app.listen(port, () => console.log(`server is running on port ${port}`));
+  app.listen(port, () => console.log(`Server Is Running on Port ${port}`));
 }
+
 app.get('/', (req, res) => {
-  res.send('Home Page route');
+  res.send('Welcome to Home page');
 });
+
 app.post('/bad', (req, res) => {
-  let num = 1;
-  num.forEach(num =>
-    console.log(num));
-  res.send('sorry this bad req');
+  let number = 12;
+  number.forEach(x => console.log(x));
+  res.send('this a Bad Route ');
 });
 
-app.get('/data', (req, res) => {
+app.get('/person', validator, (req, res) => {
   res.json({
-    id: 2171246,
-    name: 'Qasem',
+    name: req.name,
   });
 });
-app.get('/person', person('Qasem'), (req, res) => {
-  res.json({
-    message: 'person route response',
-    name: req.personName,
 
-  });
-});
-app.get('/throwing-error', person(2), (req, res) => {
-  res.send(`The error is  ${req.personName}`);
-});
-app.use(errorHandler);
 app.use('*', notFoundHandler);
-
+app.use(errorHandler);
 
 module.exports = {
   app: app,

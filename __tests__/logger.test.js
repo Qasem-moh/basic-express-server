@@ -1,14 +1,20 @@
-const logger = require('../middlewares/logger');
+// jest.spyOn
+// the thing that i'm spying on : expect(XX).toHaveBeenCalled()
+
+const logger = require('../src/middelware/logger');
 describe('logger middleware', () => {
 
   let consoleSpy;
   let req = {};
   let res = {};
   let next = jest.fn();
+
   beforeEach(() => {
     consoleSpy = jest.spyOn(console, 'log').mockImplementation();
   });
+
   afterEach(() => {
+    // put the console back
     consoleSpy.mockRestore();
   });
 

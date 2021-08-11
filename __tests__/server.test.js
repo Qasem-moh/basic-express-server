@@ -2,20 +2,22 @@
 const server = require('../src/server');
 const supertest = require('supertest');
 const request = supertest(server.app);
-describe('Api requests', () => {
-  it('handel Err', async () => {
-    const response = await request.post('/bad');
-    expect(response.status).toEqual(500);
+
+//add the name of the module that I am testing 
+describe('my API Server', () => {
+
+  it('handles not found request', async () => {
+ 
+    const response = await request.get('/testPadReq'); // async
+    expect(response.status).toEqual(404);
   });
-  it('get data from /data ', async () => {
-    const response = await request.get('/data');
-    expect(response.status).toEqual(200);
-    expect(typeof response.body).toEqual('object');
+
+  it('handles not found request', async () => {
+  
+    const response = await request.post('/person'); // async
+    expect(response.status).toEqual(404);
   });
-  it('/ route works', async () => {
-    const response = await request.get('/');
-    expect(response.status).toEqual(200);
-    console.log(response.text);
-    expect(response.text).toEqual('Home Page route');
-  });
+
+
+
 });
