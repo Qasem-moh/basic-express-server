@@ -8,25 +8,25 @@ const logger = require('./middleware/logger');
 app.use(express.json());
 app.use(logger);
 function start(port) {
-  app.listen(port, () => console.log(`will run on ${port}`));
+  app.listen(port, () => console.log(`server is running on port ${port}`));
 }
 app.get('/', (req, res) => {
-  res.send('Home route');
+  res.send('Home Page route');
 });
 app.post('/bad', (req, res) => {
   let num = 1;
   num.forEach(num =>
     console.log(num));
-  res.send('sorry bad req !!!!! ');
+  res.send('sorry this bad req');
 });
 
 app.get('/data', (req, res) => {
   res.json({
-    id: 1,
-    name: 'Samah',
+    id: 2171246,
+    name: 'Qasem',
   });
 });
-app.get('/person', person('samah'), (req, res) => {
+app.get('/person', person('Qasem'), (req, res) => {
   res.json({
     message: 'person route response',
     name: req.personName,
