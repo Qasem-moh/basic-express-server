@@ -7,6 +7,6 @@ module.exports = person = (userName) => {
       next();
     }
     else
-      next(`sorry the input not string : ' ${userName} '`);
+      next(`sorry the value not string : ' ${userName} '`);
   };
 };
